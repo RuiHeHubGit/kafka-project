@@ -13,10 +13,10 @@ import java.util.Properties;
 /**
  * Created by HeRui on 2019/2/26.
  */
-public class FirstKafkaConsumer {
+public class SecondKafkaConsumer {
     private KafkaConsumer<Integer, String> kafkaConsumer;
 
-    public FirstKafkaConsumer(String topic) {
+    public SecondKafkaConsumer(String topic) {
         Properties properties = new Properties();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
         properties.put(ConsumerConfig.GROUP_ID_CONFIG,"FirstKafkaConsumer");
@@ -28,8 +28,8 @@ public class FirstKafkaConsumer {
 
         kafkaConsumer = new KafkaConsumer<Integer, String>(properties);
         kafkaConsumer.subscribe(Collections.singletonList(topic));
-       // TopicPartition topicPartition = new TopicPartition(topic, 0);
-       // kafkaConsumer.assign(Arrays.asList(topicPartition));
+    //    TopicPartition topicPartition = new TopicPartition(topic, 0);
+     //   kafkaConsumer.assign(Arrays.asList(topicPartition));
     }
 
     public void run() {
@@ -42,7 +42,7 @@ public class FirstKafkaConsumer {
     }
 
     public static void main(String[] args) {
-        FirstKafkaConsumer consumer = new FirstKafkaConsumer("test");
+        SecondKafkaConsumer consumer = new SecondKafkaConsumer("test");
         consumer.run();
     }
 }
