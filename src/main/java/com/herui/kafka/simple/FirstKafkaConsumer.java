@@ -1,4 +1,4 @@
-package com.herui.kafka;
+package com.herui.kafka.simple;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -17,7 +17,7 @@ public class FirstKafkaConsumer {
 
     public FirstKafkaConsumer(String topic) {
         Properties properties = new Properties();
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"192.168.1.10:9092");
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
         properties.put(ConsumerConfig.GROUP_ID_CONFIG,"FirstKafkaConsumer");
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,"true");
         properties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG,"1000");
@@ -41,7 +41,7 @@ public class FirstKafkaConsumer {
     }
 
     public static void main(String[] args) {
-        FirstKafkaConsumer consumer = new FirstKafkaConsumer("first");
+        FirstKafkaConsumer consumer = new FirstKafkaConsumer("test");
         consumer.run();
     }
 }

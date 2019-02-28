@@ -1,4 +1,4 @@
-package com.herui.kafka;
+package com.herui.kafka.simple;
 
 import org.apache.kafka.clients.producer.*;
 
@@ -17,12 +17,12 @@ public class FirstKafkaProducer {
         this.topic = topic;
         this.isAsync = isAsync;
         Properties properties = new Properties();
-        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"192.168.1.10:9092");
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
         properties.put(ProducerConfig.CLIENT_ID_CONFIG,"KafkaProducerDemo");
         properties.put(ProducerConfig.ACKS_CONFIG,"-1");
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.IntegerSerializer");
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
-        properties.put(ProducerConfig.PARTITIONER_CLASS_CONFIG,"com.herui.kafka.FirstPartition");
+        properties.put(ProducerConfig.PARTITIONER_CLASS_CONFIG,"com.herui.kafka.simple.FirstPartition");
         producer = new KafkaProducer<Integer, String>(properties);
     }
 
@@ -32,7 +32,7 @@ public class FirstKafkaProducer {
             String message = "message_"+num;
             System.out.println("begin run message:"+message);
             if (isAsync){
-                producer.send(new ProducerRecord<Integer, String>(topic, message), new Callback() {
+                producer.send(new ProducerRecord<Integer, String>(topic, num, message), new Callback() {
                     public void onCompletion(RecordMetadata metadata, Exception exception) {
                         if (metadata!=null){
                             System.out.println("async-offset:"+metadata.offset()+" ->partition"+metadata.partition());
@@ -42,7 +42,7 @@ public class FirstKafkaProducer {
             }else {
                 try {
                     //future
-                    RecordMetadata  recordMetadata = producer.send(new ProducerRecord<Integer, String>(topic,message)).get();
+                    RecordMetadata  recordMetadata = producer.send(new ProducerRecord<Integer, String>(topic, num, message)).get();
                     System.out.println("async-offset:"+recordMetadata.offset()+" ->partition"+recordMetadata.partition());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -60,7 +60,7 @@ public class FirstKafkaProducer {
     }
 
     public static void main(String[] args) {
-        FirstKafkaProducer producer = new FirstKafkaProducer("first", false);
+        FirstKafkaProducer producer = new FirstKafkaProducer("test", false);
         producer.run();
     }
 }
